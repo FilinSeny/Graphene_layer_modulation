@@ -1,6 +1,6 @@
 #include "Count_model.h"
 
-Count_Model::Count_Model(long double pos) : z_0(vawe_len* pos) {};
+Count_Model::Count_Model(long double pos, long double H = 0.1) : z_0(vawe_len* pos), h(vawe_len * H) {};
 
 std::complex<long double> U(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
 	std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
@@ -20,7 +20,7 @@ std::complex<long double> U(const Count_Model& model,const long double & z,const
 		*
 		sigG;
 
-	return Fug * exp(-n_1 * (z + z0)) / n_1;
+	return Fug * exp(-n_1 * (z + z0));
 }
 
 std::complex<long double> U1(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
@@ -373,6 +373,11 @@ std::complex<long double> F_ug(const Count_Model& model, const long double & lam
 		*
 		sigG;
     return Fug;
+}
+
+
+std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double & lambda, const long double & z0) {
+    std::complex<long double> C =
 }
 
 
