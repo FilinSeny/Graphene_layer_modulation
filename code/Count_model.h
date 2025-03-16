@@ -47,12 +47,14 @@ const std::complex<long double> sigG = std::complex<long double>(1.0E-8, 1.0E-5)
 
 
 
+
 class Count_Model {
 public:
-	const long double z_0;
+	const long double z_0; //Позиция источник
+	const long double h; //толщина слоя подложки
 
 
-	Count_Model(long double pos);
+	Count_Model(long double pos, long double H = 0.1);
 
 	std::complex<long double> Count_Hankel_Tranform(std::complex<long double>(*func)(const Count_Model&, const long double &, const long double &, const long double &), ///преобразуемая функция,
 		const long double & z, const long double &R, double Bessel_num) const;

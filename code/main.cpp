@@ -1,6 +1,3 @@
-// Graphene model 2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
 #include "Count_model.h"
 #include <fstream>
@@ -10,8 +7,8 @@
 #include <vector>
 #include <mutex>
 #include <iomanip>
-std::complex<long double> W(Count_Model& model, long double z, long double z0, long double lambda);
-std::complex<long double> U(Count_Model& model, long double z, long double z0, long double lambda);
+std::complex<long double> W(const Count_Model& model, const long double & z, const long double & z0, const long double & lambda);
+std::complex<long double> U(const Count_Model& model, const long double & z, const long double & z0, const long double & lambda);
 std::complex<long double> E_rho(const Count_Model&, const long double &, const long double &, const long double &);
 std::complex<long double> E_phi(const Count_Model&, const long double &, const long double &, const long double &);
 std::complex<long double> E_z(const Count_Model&, const long double &, const long double &, const long double &);
@@ -21,6 +18,7 @@ std::complex<long double> H_phi(const Count_Model&, const long double &, const l
 std::complex<long double> H_z(const Count_Model&, const long double &, const long double &, const long double &);
 std::complex<long double> F_wg(const Count_Model&, const long double &, const long double &);
 std::complex<long double> F_ug(const Count_Model&, const long double &, const long double &);
+std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double &, const long double &);
 int n = 0;
 
 // Мьютекс для синхронизации доступа к файлу
@@ -82,29 +80,75 @@ void count_one_comp(const Count_Model & model, std::vector<long double> & spots_
 void count_f_near_spot(const Count_Model & model, std::complex<long double>(*func) (const Count_Model&, const long double &, const long double &),
                        long double spot, int n_spots = 100,
                        long double step = 0.000001, std::string out_file_name = "f_show_file") {
+
+    std::vector<long double> xs(n_spots * 2);
+    std::vector<std::complex<long double>> f_values(n_spots * 2);
+
+    for (int i = -n_spots; i < n_spots; ++i) {
+        if (i == 0) {
+            xs[i + n_spots] = -1;
+            f_values[i + n_spots] = {-1, -1};
+            continue;
+        }
+        xs[n_spots + i] = spot + (i * step);
+        f_values[n_spots + i] = func(model, xs[n_spots + i], model.z_0);
+    }
+
+    std::ofstream out(out_file_name + ".out");
+    out << "spots" << std::endl;
+    for (auto el : xs) {
+        out << std::fixed << std::setprecision(40) << el << ' ';
+    }
+    out << std::endl << "f values real" << std::endl;
+    for (auto el : f_values) {
+        out << std::fixed << std::setprecision(40) << el.real() << ' ';
+    }
+
+    out << std::endl << "f values im" << std::endl;
+    for (auto el : f_values) {
+        out << std::fixed << std::setprecision(40) << el.imag() << ' ';
+    }
+
+    out << std::endl <<  n_spots << std::endl;
+
+    out.close();
+
+}
+
+
+void count_f_near_spot_4_args(const Count_Model & model,
+                       std::complex<long double>(*func) (const Count_Model&, const long double &, const long double &, const long double &),
+                       long double spot, int n_spots = 100,
+                       long double step = 0.000001, std::string out_file_name = "f_show_file") {
     std::vector<long double> xs(n_spots * 2);
     std::vector<std::complex<long double>> f_values(n_spots * 2);
     for (int i = -n_spots; i < n_spots; ++i) {
-        if (i == 0) continue;
+        if (i == 0) {
+            xs[i + n_spots] = -1;
+            f_values[i + n_spots] = {-1, -1};
+            continue;
+        }
         xs[n_spots + i] = spot + (i * step);
-        f_values[n_spots + i] = func(model, xs[n_spots + i], model.z_0);
+        f_values[n_spots + i] = func(model, 0.000001, model.z_0, xs[n_spots + i]);
     }
 
     std::ofstream out(out_file_name + ".out");
 
     out << "spots" << std::endl;
     for (auto el : xs) {
-        out << std::fixed << std::setprecision(20) << el << ' ';
+        out << std::fixed << std::setprecision(40) << el << ' ';
     }
-    out << "f values real" << std::endl;
+    out << std::endl << "f values real" << std::endl;
     for (auto el : f_values) {
-        out << std::fixed << std::setprecision(20) << el.real() << ' ';
+        out << std::fixed << std::setprecision(40) << el.real() << ' ';
     }
 
-    out << "f values im" << std::endl;
+    out << std::endl << "f values im" << std::endl;
     for (auto el : f_values) {
-        out << std::fixed << std::setprecision(20) << el.imag() << ' ';
+        out << std::fixed << std::setprecision(40) << el.imag() << ' ';
     }
+
+    out << std::endl <<  n_spots << std::endl;
 
     out.close();
 
@@ -183,19 +227,10 @@ int main()
     std::cout << "Все функции завершили работу, данные записаны в output.txt.\n";
     */
 
-    count_f_near_spot(model, F_ug, k_1.real(), 100, 0.00000001, "F_ug_file");
+    count_f_near_spot(model, F_ug, k_2.real(), 100, 10, "F_ug_n_2_file");
+    count_f_near_spot(model, F_ug_n_2_is_zero, k_2.real(), 100, 10, "F_ug_n_2_0_file");
 
     return 0;
 
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.

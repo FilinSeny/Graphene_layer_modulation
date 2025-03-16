@@ -1,14 +1,14 @@
 #include "Count_model.h"
 
-Count_Model::Count_Model(long double pos, long double H = 0.1) : z_0(vawe_len* pos), h(vawe_len * H) {};
+Count_Model::Count_Model(long double pos, long double H) : z_0(vawe_len* pos), h(vawe_len * H) {};
 
 std::complex<long double> U(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
 	std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Fug = (n_2 * (R - (long double)1) * (r + (long double)1))
 		/
@@ -28,8 +28,8 @@ std::complex<long double> U1(const Count_Model& model,const long double & z,cons
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Fug = (n_2 * (R - (long double)1) * (r + (long double)1))
 		/
@@ -51,8 +51,8 @@ std::complex<long double> U0(const Count_Model& model,const long double & z,cons
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Fug = (n_2 * (R - (long double)1) * (r + (long double)1))
 		/
@@ -75,8 +75,8 @@ std::complex<long double> W(const Count_Model& model,const long double & z,const
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Rp = R + (long double)1;
 	std::complex<long double> Rn = R - (long double)1;
@@ -101,8 +101,8 @@ std::complex<long double> WP(const Count_Model& model,const long double & z,cons
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Rp = R + (long double)1;
 	std::complex<long double> Rn = R - (long double)1;
@@ -126,8 +126,8 @@ std::complex<long double> WP1(const Count_Model& model,const long double & z,con
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Rp = R + (long double)1;
 	std::complex<long double> Rn = R - (long double)1;
@@ -151,8 +151,8 @@ std::complex<long double> WP_1(const Count_Model& model,const long double & z,co
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Rp = R + (long double)1;
 	std::complex<long double> Rn = R - (long double)1;
@@ -334,8 +334,8 @@ std::complex<long double> F_wg(const Count_Model& model, const long double & lam
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Rp = R + (long double)1;
 	std::complex<long double> Rn = R - (long double)1;
@@ -359,8 +359,8 @@ std::complex<long double> F_ug(const Count_Model& model, const long double & lam
 	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
 	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
 
-	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * z0);
-	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * z0);
+	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
 	std::complex<long double> Fug = (n_2 * (R - (long double)1) * (r + (long double)1))
 		/
@@ -376,8 +376,17 @@ std::complex<long double> F_ug(const Count_Model& model, const long double & lam
 }
 
 
-std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double & lambda, const long double & z0) {
-    std::complex<long double> C =
+std::complex<long double> F_ug_n_2_is_zero(const Count_Model& model, const long double & lambda, const long double & z0) {
+    std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
+	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
+	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
+    std::complex<long double> C_eps = model.h + eps3 / eps2 / n_3;
+    std::complex<long double> C = model.h + (long double) 1 / n_3;
+
+    return (long double) (-4) * C * i * sigG / omega /
+    (((long double) 2 * eps2 * n_1 * C_eps + eps1) * ((long double) 2) *((long double) 1 + n_2) +
+     (long double) 4 * mu0_vac * sigG * sigG * n_1 * C);
+
 }
 
 
