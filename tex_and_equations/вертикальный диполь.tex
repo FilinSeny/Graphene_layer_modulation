@@ -1,0 +1,149 @@
+\input{legend.tex}
+
+\begin{document}
+	\newpage 
+	Для вертикального диполя в трехслойной среде получаем ур-я
+	
+	для X ур-я вида:
+	
+	\begin{equation}
+		\begin{cases}
+			X_1 = d_1 e^{-n_1 z}, z > 0 \\
+			X_2 = d_2 e^{-n_2 z} + c_2 e^{n_2 z}, 0 < z < z_1 = H \\
+			X_3 = c_3 e^{-n_3 z}, z < H
+			
+		\end{cases}		
+	\end{equation}
+	
+	
+	При $z = 0$ имеем условия вида:
+	
+	\begin{equation}
+		\begin{cases}
+			d_1 = d_2 + c_2 \\
+			-n_1 d_1 = -n_2 d_2 + n_2 c_2 + i \omega \delta \frac{1}{k_2^2}n_2 (\gamma_2 - \beta_2)
+			
+		\end{cases}
+	\end{equation}
+	
+	При $z = z_1 = H$:
+	
+	\begin{equation}
+		\begin{cases}
+			d_2 e^{-n_2 z_1} + c_2 e^{n_2 z_1} = c_3 e^{n_3 z_1} \\
+			-n_2 d_2 e^{-n1 z_1} + n_2 c_2 e^{n_2 z_1} = n_3 c_3 e^{n_3 z_1}
+		\end{cases}
+	\end{equation}
+	
+	Решая получим:
+	
+	\begin{equation}
+		\begin{aligned}
+			c_3  = \frac{2 c_2}{1 + \frac{n_3}{n_2}} e^{z_1(n_2 - n_3)}\\
+			d_2 = c_2 e^{2 z_1 n_2} \frac{n_2 - n_3}{n_2 + n_3} \\
+			d_1 = c_2 (1 + e^{2 z_1 n_2} (\frac{n_2 - n_3}{n_2 + n_3})) \\
+			c_2 = i \omega \delta \frac{n_2}{k_2^2} (\gamma_2 - \beta_2)
+		\end{aligned}
+	\end{equation}
+	
+	\newpage
+	
+	для V получаем ур-я:
+	\begin{equation}
+		\begin{cases}
+			V_1^* = \beta_1^* e^{-n_1 z}, z > z_0 \\
+			V_1 = \beta_1 e^{-n_1 z} + \gamma_1 e^{n_1 z}, 0 < z < z_0 \\
+			V_2 = \beta_2 e^{-n_2 z} + \gamma_2 e^{n_2 z}, z_1 < z < 0 \\
+			V_3 = \gamma_3 e^{n_3 z}, z < z_1
+		\end{cases}
+	\end{equation}
+	
+	и набор краевых условий
+	\newline
+	
+	
+	при $z = z_0$:
+	
+	\begin{equation}
+		\begin{cases}
+			\beta_1^8 e^{-n_1 z_0} = \beta_1 e^{-n_1 z_0} + \gamma_1 e^{n_1 z_0} \\
+			
+			-n_1 \beta_1^* e^{-n_1 z_0} = -n_1 \beta_1 e^{-n_1 z_0} + n_1 \gamma_1 e^{n_1 z_0} + 2
+		\end{cases}
+	\end{equation}
+	
+	
+	при $z = 0$:
+	
+	\begin{equation}
+		\begin{cases}
+			\frac{1}{k_1^2} (-n_1 \beta_1 + n_1 \gamma_1) = \frac{1}{k_2^2} (-n_2 \beta_2 + n_2 \gamma_2) \\
+			
+			\beta_1 + \gamma_1 - \beta_2 - \gamma_2 = i  \omega \delta (d_2 + c_2) \\
+			
+		\end{cases}	
+	\end{equation}
+	
+	
+	при $z = z_1 = H$:
+	
+	\begin{equation}
+		\begin{cases}
+			\frac{1}{k_2^2}(\beta_2 (-n_2) e^{-n_2 z_1} + \gamma_2 n_2 e^{n_2 z_1}) = \frac{1}{k_3^2}\gamma_3 n_3 e^{n_3 z_1} \\
+			
+		\beta_2 e^{-n_2 z_1} + \gamma_2 e^{n_2 z_1} = \gamma_3 e^{n_3 z_1} \\
+		\end{cases}
+	\end{equation}
+	
+	
+	решая получим:
+	
+	\begin{equation}
+		\begin{aligned}
+			\beta_1 = \beta_1^* - \gamma_1 e^{2 n_1 z_0} \\
+			\gamma_1 = \frac{2}{n_1} e^{-n_1 z_0} \\
+			\beta_2 = \frac{1}{2} (q_{21} \beta_1 + \gamma_1 p_{21} - L) \\
+			\gamma_2 = \frac{1}{2} (\beta_1 q_{21} + \gamma_1 p_{21} + L) \\
+			L = i \omega \delta (d_2 + c_2) \\
+			p_{21} = 1 - \frac{k_2^2 n_1}{k_1^2 n_2} \\
+			q_{21} = 1 + \frac{k_2^2 n_1}{k_1^2 n_2} \\
+			\gamma_3 = \beta_2 e^{z_1 (-n_3 - n_2)} + \gamma_2 e^{n_2 - n_3} \\
+			\beta_2 = \gamma_2 \frac{n_2 k_3^2 + n_3 k_2^2}{n_2 k_3^2 - n_3 k_2^2} e^{2 z_1 n_2}  \\
+		\end{aligned}
+	\end{equation}
+	
+	Выразим L из 4:
+	
+	\begin{equation}
+		L = - \omega^2 \delta^2 \frac{1}{k_1^2} n_2 (\gamma_2 - \beta_2) (1 + e^{2 z_1 n_2 } \frac{n_2 - n_3}{n_1 + n_2})
+	\end{equation}
+	
+	пусть:
+	
+	$$R = - \omega^2 \delta^2 \frac{1}{k_1^2} n_2 (1 + e^{2 z_1 n_2 } \frac{n_2 - n_3}{n_1 + n_2})$$
+	
+	и 
+	
+	$$N =  \frac{n_2 k_3^2 + n_3 k_2^2}{n_2 k_3^2 - n_3 k_2^2} $$
+	
+	Тогда L примет вид:
+	
+	$$L = Q ((\beta_1^* - \gamma_1 e^{2n_1 z_0} ) p_{21} + \gamma_1 q_{21}) $$
+	где
+	$$Q = \frac{R (1 - Ne^{2 z_1 n_2})}{2 (1 - \frac{R}{2}(1 - N e^{2 z_1}))}$$
+	
+	тогда 
+	
+	\begin{equation}
+		\begin{aligned}
+			\beta_1^* (q_{21} - p_{21} N e^{2 z_1 n_2}) = \\
+			\gamma_1 (q_{21} 	(Ne^{2z_1 n_2} + e^{2 n_1 z_0}) - p_{21} (N e^{2 z_1 n_2 - 2 n_1 z_0} + 1) +  
+			Q(Ne^{2 z_1 n_2} - 1) (q_{21} - p_{21} e^{2 n_1 z_0}) )\\
+		\end{aligned}
+	\end{equation}
+	
+
+	
+	
+	 
+\end{document}
