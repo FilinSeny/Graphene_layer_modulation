@@ -85,6 +85,7 @@ public:
     friend std::complex<long double> F_ug(const Count_Model&, const long double &, const long double &);
 
     friend std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double &, const long double &);
+    friend std::complex<long double> F_ug_n_1_is_zero(const Count_Model&, const long double &, const long double &);
 
 	friend std::ostream & operator << (std::ostream & out, const Count_Model&);
 

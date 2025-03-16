@@ -19,10 +19,18 @@ std::complex<long double> H_z(const Count_Model&, const long double &, const lon
 std::complex<long double> F_wg(const Count_Model&, const long double &, const long double &);
 std::complex<long double> F_ug(const Count_Model&, const long double &, const long double &);
 std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double &, const long double &);
+std::complex<long double> F_ug_n_1_is_zero(const Count_Model&, const long double &, const long double &);
 int n = 0;
 
 // Мьютекс для синхронизации доступа к файлу
 std::mutex file_mutex;
+
+
+std::ostream & operator << (std::ostream & out, const std::complex<long double> & z) {
+    out << "{" << z.real() << ", " << z.imag() << "}";
+    return out;
+}
+
 
 
 void run_and_write_to_file(const std::string& filename,
@@ -85,11 +93,11 @@ void count_f_near_spot(const Count_Model & model, std::complex<long double>(*fun
     std::vector<std::complex<long double>> f_values(n_spots * 2);
 
     for (int i = -n_spots; i < n_spots; ++i) {
-        if (i == 0) {
+        /*if (i == 0) {
             xs[i + n_spots] = -1;
             f_values[i + n_spots] = {-1, -1};
             continue;
-        }
+        }*/
         xs[n_spots + i] = spot + (i * step);
         f_values[n_spots + i] = func(model, xs[n_spots + i], model.z_0);
     }
@@ -227,8 +235,11 @@ int main()
     std::cout << "Все функции завершили работу, данные записаны в output.txt.\n";
     */
 
-    count_f_near_spot(model, F_ug, k_2.real(), 100, 10, "F_ug_n_2_file");
-    count_f_near_spot(model, F_ug_n_2_is_zero, k_2.real(), 100, 10, "F_ug_n_2_0_file");
+    //count_f_near_spot(model, F_ug, k_1.real(), 100, 10, "F_ug_n_1_file");
+    //count_f_near_spot(model, F_ug_n_1_is_zero, k_1.real(), 100, 1, "F_ug_n_1_0_file");
+
+    std::cout << F_ug(model, k_2.real(), model.z_0) << std::endl;
+    std::cout << F_ug_n_2_is_zero(model, k_2.real(), model.z_0) << std::endl;
 
     return 0;
 
