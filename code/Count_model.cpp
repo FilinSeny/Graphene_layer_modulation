@@ -408,6 +408,40 @@ std::complex<long double> F_ug_n_1_is_zero(const Count_Model& model, const long 
 }
 
 
+std::complex<long double> F_wg_n_1_is_zero(const Count_Model& model, const long double & lambda, const long double & z0) {
+    std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
+	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
+	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
+    std::complex<long double> C_eps = model.h + eps3 / eps2 / n_3;
+    std::complex<long double> C = model.h + (long double) 1 / n_3;
+
+    std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
+
+    return  (long double) 2 * (mu0_vac * sigG * sigG * (r + (long double) 1)
+            /
+            (eps1 * n_2 * ((long double) 1 - r))
+            -
+            eps2 * (r + (long double) 1)
+            /
+            (eps1 * (R - (long double) 1) * n_2));
+}
+
+
+std::complex<long double> F_wg_n_2_is_zero(const Count_Model& model, const long double & lambda, const long double & z0) {
+    std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
+	std::complex<long double> n_2 = sqrt(lambda * lambda - k_2 * k_2);
+	std::complex<long double> n_3 = sqrt(lambda * lambda - k_3 * k_3);
+    std::complex<long double> C_eps = model.h + eps3 / eps2 / n_3;
+    std::complex<long double> C = model.h + (long double) 1 / n_3;
+
+    std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
+	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
+
+    return (long double) 2 * (eps2 * C_eps * ((long double) 1 + n_1 * C) + mu0_vac * sigG * sigG * C)
+            /
+            (mu0_vac * sigG * sigG * n_1 * C - (eps2 * n_1 * C_eps + eps1) * ((long double) 1 + n_1 * C));
+}
 
 std::ostream & operator << (std::ostream & out, const Count_Model& model) {
     out << "k_1: " << k_1 << std::endl;

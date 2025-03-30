@@ -20,6 +20,8 @@ std::complex<long double> F_wg(const Count_Model&, const long double &, const lo
 std::complex<long double> F_ug(const Count_Model&, const long double &, const long double &);
 std::complex<long double> F_ug_n_2_is_zero(const Count_Model&, const long double &, const long double &);
 std::complex<long double> F_ug_n_1_is_zero(const Count_Model&, const long double &, const long double &);
+std::complex<long double> F_wg_n_2_is_zero(const Count_Model&, const long double &, const long double &);
+std::complex<long double> F_wg_n_1_is_zero(const Count_Model&, const long double &, const long double &);
 int n = 0;
 
 // Мьютекс для синхронизации доступа к файлу
@@ -235,11 +237,11 @@ int main()
     std::cout << "Все функции завершили работу, данные записаны в output.txt.\n";
     */
 
-    //count_f_near_spot(model, F_ug, k_1.real(), 100, 10, "F_ug_n_1_file");
-    //count_f_near_spot(model, F_ug_n_1_is_zero, k_1.real(), 100, 1, "F_ug_n_1_0_file");
+    count_f_near_spot(model, F_ug, k_1.real(), 100, 10, "F_ug_n_1_file");
+    count_f_near_spot(model, F_ug_n_1_is_zero, k_1.real(), 100, 1, "F_ug_n_1_0_file");
 
-    std::cout << F_ug(model, k_2.real(), model.z_0) << std::endl;
-    std::cout << F_ug_n_2_is_zero(model, k_2.real(), model.z_0) << std::endl;
+    std::cout << F_wg(model, k_1.real(), model.z_0) << std::endl;
+    std::cout << F_wg_n_1_is_zero(model, k_1.real(), model.z_0) << std::endl;
 
     return 0;
 
