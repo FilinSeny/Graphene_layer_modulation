@@ -296,8 +296,34 @@ std::complex<long double> Count_Model::Count_Hankel_Tranform_with_spetial_points
 	const long double & z,const long double & R, std::string func_name, double Bessel_num = 0) const {
 
     //отдельно обсчитываем особенность
+    std::complex<long double> val_near_k1 = Count_Hankel_Tranform_near_special_spot(func, z, R, func_name, 1, Bessel_num);
+    std::complex<long double> val_near_k2 = Count_Hankel_Tranform_near_special_spot(func, z, R, func_name, 2, Bessel_num);
 
+    long double add = 0;
+    int num_of_zone = 0;
+    long double lambda = 0;
+    std::complex<long double> res = {0, 0};
+    long double rho = sqrt((z - z_0) * (z - z_0) + R * R);
 
+    for (; num_of_zone < numbers_of_steps_in_zones_of_hankel_transforms.size(); ++num_of_zone) {
+        for (int i = 0; i < numbers_of_steps_in_zones_of_hankel_transforms[num_of_zone]; ++i) {
+            if (lambda >= k_1.real() - number_of_steps_near_spots * steps_near_spots &&
+                 lambda <= k_1.real() + number_of_steps_near_spots * steps_near_spots)
+            {
+                 continue;
+            }
+            if (lambda >= k_2.real() - number_of_steps_near_spots * steps_near_spots &&
+                 lambda <= k_2.real() + number_of_steps_near_spots * steps_near_spots)
+            {
+                 continue;
+            }
+            res += func(*this, z, z_0, lambda) * std::cyl_bessel_j(Bessel_num, lambda * rho) * lambda *
+            steps_in_zones_of_hankel_transforms[num_of_zone];
+            lambda += steps_in_zones_of_hankel_transforms[num_of_zone];
+        }
+    }
+
+    return res + val_near_k1 + val_near_k2;
 }
 
 
