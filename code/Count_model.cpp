@@ -260,7 +260,7 @@ std::complex<long double> Count_Model::Count_Hankel_Tranform_near_special_spot(s
 	const long double & z,const long double & R, std::string func_name, int number_of_point, double Bessel_num = 0) const {
 
     long double spot = number_of_point == 1 ? k_1.real() : k_2.real();
-    std::complex<long double> spot_val {0};
+    std::complex<long double> spot_val {0, 0};
     if (func_name == "Fug") {
         spot_val = number_of_point == 1 ? Fug_val_in_k1 : Fug_val_in_k2;
     } else {
@@ -286,7 +286,7 @@ std::complex<long double> Count_Model::Count_Hankel_Tranform_near_special_spot(s
 		res += (yp + yc) / (long double)2.0 * steps_near_spots;
     }
 
-    return res;
+    return res + steps_near_spots * spot_val;
 }
 
 
