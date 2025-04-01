@@ -7,7 +7,35 @@ Count_Model::Count_Model(long double pos, long double H) : z_0(vawe_len* pos), h
     Fwg_val_in_k1 = F_wg_n_1_is_zero(*this, k_1.real(), z_0);
     Fwg_val_in_k2 = F_wg_n_2_is_zero(*this, k_2.real(), z_0);
 
+    number_of_steps_near_spots = 1000;
+    steps_near_spots = 0.001;
+
+    numbers_of_steps_in_zones_of_hankel_transforms = {100000, 10000, 10000, 10000, 1000, 1000};
+    steps_in_zones_of_hankel_transforms = {0.01, 1, 10, 100, 1000, 10000};
+
 };
+
+
+Count_Model::Count_Model(long double pos, long double H,
+                         int n_spots_near, long double steps_near,
+                         std::vector<int> ns_spots_zones, std::vector<long double> steps_in_zones) : z_0(vawe_len* pos), h(vawe_len * H) {
+    Fug_val_in_k1 = F_ug_n_1_is_zero(*this, k_1.real(), z_0);
+    Fug_val_in_k2 = F_ug_n_2_is_zero(*this, k_2.real(), z_0);
+
+    Fwg_val_in_k1 = F_wg_n_1_is_zero(*this, k_1.real(), z_0);
+    Fwg_val_in_k2 = F_wg_n_2_is_zero(*this, k_2.real(), z_0);
+
+    number_of_steps_near_spots = {1000};
+    steps_near_spots = {0.001};
+
+    numbers_of_steps_in_zones_of_hankel_transforms = {100000, 10000, 10000, 10000, 1000, 1000, 100};
+    steps_in_zones_of_hankel_transforms = {0.01, 1, 10, 100, 1000, 10000, 1e6};
+
+};
+
+
+
+
 
 std::complex<long double> U(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
 	std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
@@ -27,7 +55,7 @@ std::complex<long double> U(const Count_Model& model,const long double & z,const
 		*
 		sigG;
 
-	return Fug * exp(-n_1 * (z + z0));
+	return Fug * exp((long double) (-1) * n_1 * (z + z0));
 }
 
 std::complex<long double> U1(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
@@ -227,12 +255,50 @@ std::complex<long double> Count_Model::Count_Hankel_Tranform(std::complex<long d
 
 
 
+std::complex<long double> Count_Model::Count_Hankel_Tranform_near_special_spot(std::complex<long double>(*func)
+                                                                               (const Count_Model&,const long double &,const long double &, const long double &),
+	const long double & z,const long double & R, std::string func_name, int number_of_point, double Bessel_num = 0) const {
+
+    long double spot = number_of_point == 1 ? k_1.real() : k_2.real();
+    std::complex<long double> spot_val {0};
+    if (func_name == "Fug") {
+        spot_val = number_of_point == 1 ? Fug_val_in_k1 : Fug_val_in_k2;
+    } else {
+        spot_val = number_of_point == 1 ? Fwg_val_in_k1 : Fwg_val_in_k2;
+    }
+
+    std::complex<long double> res {0, 0};
+    long double rho = sqrt((z - z_0) * (z - z_0) + R * R);
+
+    for (int i = -number_of_steps_near_spots; i < number_of_steps_near_spots; ++i) {
+        if (!i) continue;
+        long double xp = spot - (steps_near_spots * (i - 1));
+		long double xc = spot - (steps_near_spots * (i));
+		std::complex<long double> yp = func(*this, z, z_0, xp) * std::cyl_bessel_j(Bessel_num, xp * rho) * xp;
+		if (Bessel_num == 1.0) {
+			yp *= xp;
+		}
+		std::complex<long double> yc = func(*this, z, z_0, xc) * std::cyl_bessel_j(Bessel_num, xc * rho) * xc;
+		if (Bessel_num == 1.0) {
+			yc *= xc;
+		}
+
+		res += (yp + yc) / (long double)2.0 * steps_near_spots;
+    }
+
+    return res;
+}
+
+
 
 //Преобразования Ханкеля с учетом двух "особенных отчек"
-///std::complex<long double> Count_Model::Count_Hankel_Tranform_with_spetial_points(std::complex<long double>(*func)(const Count_Model&,const long double &,const long double &, const long double &),
-	//const long double & z,const long double & R, double Bessel_num = 0) const {
+std::complex<long double> Count_Model::Count_Hankel_Tranform_with_spetial_points(std::complex<long double>(*func)(const Count_Model&,const long double &,const long double &, const long double &),
+	const long double & z,const long double & R, std::string func_name, double Bessel_num = 0) const {
 
-//}
+    //отдельно обсчитываем особенность
+
+
+}
 
 
 
@@ -485,6 +551,15 @@ std::ostream & operator << (std::ostream & out, const Count_Model& model) {
     out << "| Fug in k2: " << model.Fug_val_in_k2 << std::endl;
     out << "| Fwg in k2: " << model.Fwg_val_in_k2 << std::endl;
     out << "| k_3: " << k_3 << std::endl;
+    out << "|\n| Model params\n";
+    out << "| step value near spots: " << model.steps_near_spots << "\n";
+    out << "| number of steps near spots: " << model.number_of_steps_near_spots << "\n";
+    out << "| number of counting zones: " << model.steps_in_zones_of_hankel_transforms.size() << "\n";
+    out << "| zones info:\n";
+    for (int i = 0; i < model.steps_in_zones_of_hankel_transforms.size(); ++i) {
+        out << "|| zone" << i <<  ": n spots = " << model.numbers_of_steps_in_zones_of_hankel_transforms[i] << ' ';
+        out << " step size = " << model.steps_in_zones_of_hankel_transforms[i] << "\n";
+    }
     out << "|----------------------------- \n \n";
 
     return out;

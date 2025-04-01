@@ -54,11 +54,25 @@ public:
 	const long double z_0; //Позиция источник
 	const long double h; //толщина слоя подложки
     std::complex<long double> Fug_val_in_k1, Fug_val_in_k2, Fwg_val_in_k1, Fwg_val_in_k2;
+    long double steps_near_spots;
+    int  number_of_steps_near_spots;
+    std::vector<int> numbers_of_steps_in_zones_of_hankel_transforms;
+    std::vector<long double> steps_in_zones_of_hankel_transforms;
 
 	Count_Model(long double pos, long double H = 0.1);
+	Count_Model(long double pos, long double H,
+                int n_spots_near, long double steps_near,
+                std::vector<int> ns_spots_zones, std::vector<long double> steps_in_zones);
 
-	std::complex<long double> Count_Hankel_Tranform(std::complex<long double>(*func)(const Count_Model&, const long double &, const long double &, const long double &), ///преобразуемая функция,
+	std::complex<long double> Count_Hankel_Tranform(std::complex<long double>(*func)
+                                                 (const Count_Model&, const long double &, const long double &, const long double &), ///преобразуемая функция,
 		const long double & z, const long double &R, double Bessel_num) const;
+    std::complex<long double> Count_Hankel_Tranform_with_spetial_points(std::complex<long double>(*func)
+                                                                        (const Count_Model&,const long double &,const long double &, const long double &),
+        const long double & z,const long double & R, std::string func_name, double Bessel_num) const;
+    std::complex<long double> Count_Hankel_Tranform_near_special_spot(std::complex<long double>
+                                                                      (*func)(const Count_Model&,const long double &,const long double &, const long double &),
+        const long double & z,const long double & R, std::string func_name, int number_of_point, double Bessel_num) const;
 
 	friend std::complex<long double> U1(const Count_Model&, const long double & ,const long double &,const long double &);
 	friend std::complex<long double> U0(const Count_Model&, long double, const long double, const long double);
