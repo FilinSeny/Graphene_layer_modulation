@@ -107,16 +107,19 @@ void count_f_near_spot(const Count_Model & model, std::complex<long double>(*fun
     std::ofstream out(out_file_name + ".out");
     out << "spots" << std::endl;
     for (auto el : xs) {
-        out << std::fixed << std::setprecision(40) << el << ' ';
+        ///out << std::fixed << std::setprecision(40);
+        out << el << ' ';
     }
     out << std::endl << "f values real" << std::endl;
     for (auto el : f_values) {
-        out << std::fixed << std::setprecision(40) << el.real() << ' ';
+        ///out << std::fixed << std::setprecision(40);
+        out << el.real() << ' ';
     }
 
     out << std::endl << "f values im" << std::endl;
     for (auto el : f_values) {
-        out << std::fixed << std::setprecision(40) << el.imag() << ' ';
+        ///out << std::fixed << std::setprecision(40);
+        out << el.imag() << ' ';
     }
 
     out << std::endl <<  n_spots << std::endl;
@@ -188,13 +191,7 @@ std::vector<long double> prepare_z(const Count_Model & model, int n = 4) {
 
 
 
-std::ostream & operator << (std::ostream & out, const std::vector<long double> & v) {
-    for (auto el : v) {
-        out << el << ' ';
-    }
 
-    return out;
-}
 
 
 
@@ -237,11 +234,11 @@ int main()
     std::cout << "Все функции завершили работу, данные записаны в output.txt.\n";
     */
 
-    count_f_near_spot(model, F_ug, k_1.real(), 100, 10, "F_ug_n_1_file");
-    count_f_near_spot(model, F_ug_n_1_is_zero, k_1.real(), 100, 1, "F_ug_n_1_0_file");
+    count_f_near_spot(model, F_ug, k_2.real(), 100, 0.00000000000001, "F_ug_n_2_file");
+    ///count_f_near_spot(model, F_ug_n_2_is_zero, k_2.real(), 100, 0.0001, "F_ug_n_2_0_file");
 
-    std::cout << F_wg(model, k_1.real(), model.z_0) << std::endl;
-    std::cout << F_wg_n_1_is_zero(model, k_1.real(), model.z_0) << std::endl;
+    ///std::cout << F_wg(model, k_1.real(), model.z_0) << std::endl;
+    ///std::cout << F_wg_n_1_is_zero(model, k_1.real(), model.z_0) << std::endl;
 
     return 0;
 

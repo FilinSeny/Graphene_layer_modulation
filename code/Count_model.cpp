@@ -1,6 +1,13 @@
 #include "Count_model.h"
 
-Count_Model::Count_Model(long double pos, long double H) : z_0(vawe_len* pos), h(vawe_len * H) {};
+Count_Model::Count_Model(long double pos, long double H) : z_0(vawe_len* pos), h(vawe_len * H) {
+    Fug_val_in_k1 = F_ug_n_1_is_zero(*this, k_1.real(), z_0);
+    Fug_val_in_k2 = F_ug_n_2_is_zero(*this, k_2.real(), z_0);
+
+    Fwg_val_in_k1 = F_wg_n_1_is_zero(*this, k_1.real(), z_0);
+    Fwg_val_in_k2 = F_wg_n_2_is_zero(*this, k_2.real(), z_0);
+
+};
 
 std::complex<long double> U(const Count_Model& model,const long double & z,const long double & z0,const long double & lambda) {
 	std::complex<long double> n_1 = sqrt(lambda * lambda - k_1 * k_1);
@@ -219,6 +226,16 @@ std::complex<long double> Count_Model::Count_Hankel_Tranform(std::complex<long d
 }
 
 
+
+
+//Преобразования Ханкеля с учетом двух "особенных отчек"
+///std::complex<long double> Count_Model::Count_Hankel_Tranform_with_spetial_points(std::complex<long double>(*func)(const Count_Model&,const long double &,const long double &, const long double &),
+	//const long double & z,const long double & R, double Bessel_num = 0) const {
+
+//}
+
+
+
 std::complex<long double> d2zrF(const Count_Model& model, const long double & rho,const long double & z,const long double & z0) {
 	long double r = sqrt(rho * rho + (z + z0) * (z + z0));
 	std::complex<long double> _exp = std::exp(-std::complex<long double>(0, 1) * k_1 * r);
@@ -362,7 +379,7 @@ std::complex<long double> F_ug(const Count_Model& model, const long double & lam
 	std::complex<long double> R = (n_2 * eps3 - n_3 * eps2) / (n_2 * eps3 + n_3 * eps2) * exp(-(long double)2 * n_2 * model.h);
 	std::complex<long double> r = (n_2 - n_3) / (n_2 + n_3) * exp(-(long double)2 * n_2 * model.h);
 
-	std::cout << R.real() << std::endl;
+	///std::cout << R.real() << std::endl;
 	std::complex<long double> Fug = (n_2 * (R - (long double)1) * (r + (long double)1))
 		/
 		( (eps2 * n_1 * (R + (long double)1) - eps1 * n_2 * (R - (long double)1)) * (n_2 * ((long double)1 - r) + n_1 * ((long double)1 + r)) -
@@ -421,7 +438,7 @@ std::complex<long double> F_wg_n_1_is_zero(const Count_Model& model, const long 
     return  (long double) 2 * (mu0_vac * sigG * sigG * (r + (long double) 1)
             /
             (eps1 * n_2 * ((long double) 1 - r))
-            -
+            +
             eps2 * (r + (long double) 1)
             /
             (eps1 * (R - (long double) 1) * n_2));
@@ -443,11 +460,36 @@ std::complex<long double> F_wg_n_2_is_zero(const Count_Model& model, const long 
             (mu0_vac * sigG * sigG * n_1 * C - (eps2 * n_1 * C_eps + eps1) * ((long double) 1 + n_1 * C));
 }
 
-std::ostream & operator << (std::ostream & out, const Count_Model& model) {
-    out << "k_1: " << k_1 << std::endl;
-    out << "k_2: " << k_2 << std::endl;
-    out << "k_3: " << k_3 << std::endl;
+
+
+std::ostream & operator << (std::ostream & out, const std::vector<long double> & v) {
+    for (auto el : v) {
+        out << el << ' ';
+    }
+
     return out;
 }
+
+
+
+std::ostream & operator << (std::ostream & out, const Count_Model& model) {
+    out << "\n|----------------------------- \n| Model info \n";
+    out << "| params of layers: \n";
+    out << "| z0: " << model.z_0 << "\n";
+    out << "| H: " << model.h << "\n";
+    out << "| \n";
+    out << "| k_1: " << k_1 << std::endl;
+    out << "| Fug in k1: " << model.Fug_val_in_k1 << std::endl;
+    out << "| Fwg in k1: " << model.Fwg_val_in_k1 << std::endl;
+    out << "| k_2: " << k_2 << std::endl;
+    out << "| Fug in k2: " << model.Fug_val_in_k2 << std::endl;
+    out << "| Fwg in k2: " << model.Fwg_val_in_k2 << std::endl;
+    out << "| k_3: " << k_3 << std::endl;
+    out << "|----------------------------- \n \n";
+
+    return out;
+}
+
+
 
 

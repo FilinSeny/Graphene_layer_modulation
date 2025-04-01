@@ -14,6 +14,7 @@
 #include <complex>
 #include <ostream>
 #include <math.h>
+#include <vector>
 
 const long double PI = 3.14159265358979323846;
 const long double V_Light = 299792458.;
@@ -52,7 +53,7 @@ class Count_Model {
 public:
 	const long double z_0; //Позиция источник
 	const long double h; //толщина слоя подложки
-
+    std::complex<long double> Fug_val_in_k1, Fug_val_in_k2, Fwg_val_in_k1, Fwg_val_in_k2;
 
 	Count_Model(long double pos, long double H = 0.1);
 
